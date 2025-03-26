@@ -1,78 +1,147 @@
+
+
 # SeniorTalk: A Chinese Conversation Dataset with Rich Annotations for Super-Aged Seniors
- 
-[![Hugging Face Datasets](https://img.shields.io/badge/🤗%20Hugging%20Face-Datasets-yellow.svg)](https://huggingface.co/datasets/BAAI/SeniorTalk)
-[![Hugging Face Datasets](https://img.shields.io/badge/Paper-link-orange)]([https://arxiv.org/abs/2409.18584](https://www.arxiv.org/pdf/2503.16578))
+[![Hugging Face Datasets](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/BAAI/SeniorTalk)
+[![arXiv](https://img.shields.io/badge/arXiv-2409.18584-b31b1b.svg)](https://www.arxiv.org/pdf/2503.16578)
 [![License: CC BY-NC-SA-4.0](https://img.shields.io/badge/License-CC%20BY--SA--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-## ⭐ Introduction
+[![Github](https://img.shields.io/badge/Github-ChildMandarin-blue)](https://github.com/flageval-baai/SeniorTalk)
 
-This repository contains the **ChildMandarin** dataset, a comprehensive Mandarin speech dataset specifically designed for young children aged 3 to 5. This dataset aims to address the scarcity of resources in this area and facilitate research in child speech recognition, speaker verification, and related fields.
+## Introduction
 
-## 🚀 Dataset Details
+**SeniorTalk** is a comprehensive, open-source Mandarin Chinese speech dataset specifically designed for research on  elderly aged 75 to 85. This dataset addresses the critical lack of publicly available resources for this age group, enabling advancements in automatic speech recognition (ASR), speaker verification (SV), speaker dirazation (SD), speech editing and other related fields.  The dataset is released under a **CC BY-NC-SA 4.0 license**, meaning it is available for non-commercial use.
 
-*   **Age Range:** 3-5 years old
-*   **Total Duration:** 41.25 hours
-*   **Number of Speakers:** 397
-*   **Geographic Coverage:** 22 out of 34 provincial-level administrative divisions in China
-*   **Gender Distribution:** Balanced across all age groups
-*   **Recording Devices:** Smartphones (Android and iPhone)
-*   **Recording Environment:** Quiet indoor environments
-*   **Annotation:** Character-level manual transcriptions, age, gender, birthplace, device, accent level.
-* **Content:** Unrestricted, focusing on age-appropriate daily communication.
-* **Data Format:** WAV PCM, 16kHz sampling rate, 16-bit precision
+## Dataset Details
 
-### Dataset Statistics
+This dataset contains 55.53 hours of high-quality speech data collected from 202 elderly across 16 provinces in China. Key features of the dataset include:
 
-| Split | # Speakers | # Utterances | Duration (hrs) | Avg. Utterance Length (s) |
-| :---- | :--------: | :----------: | :------------: | :-----------------------: |
-| Train |    317     |    32,658    |     33.35      |           3.68            |
-| Dev   |     39     |    4,057     |      3.78      |           3.35            |
-| Test  |     41     |    4,198     |      4.12      |           3.53            |
-| **Sum**|  **397**   |  **40,913**    |   **41.25**     |       **3.52**           |
+*   **Age Range:**  75-85 years old (inclusive).  This is a crucial age range often overlooked in speech datasets.
+*   **Speakers:** 202 unique child speakers.
+*   **Geographic Diversity:** Speakers from 16 of China's 34 provincial-level administrative divisions, capturing a range of regional accents.
+*   **Gender Balance:**  Approximately 1:3 representation of male and female speakers, largely attributed to the differing average ages of males and females among the elderly.
+*   **Recording Conditions:**  Recordings were made in quiet environments using a variety of smartphones (both Android and iPhone devices) to ensure real-world applicability.
+*   **Content:**  Natural, conversational speech during age-appropriate activities.  The content is unrestricted, promoting spontaneous and natural interactions.
+*   **Audio Format:**  WAV files with a 16kHz sampling rate. 
+*   **Transcriptions:**  Carefully crafted, character-level manual transcriptions.  
+* **Annotations:** The dataset includes annotations for each utterance, and for the speakers level.
+    *   **Session-level**:  `sentence_start_time`,`sentence_end_time`,`overlapped speech`
+    *   **Utterance-level**:  `id`, `accent_level`, `text` (transcription).
+    *   **Token-level**:   `special token`([SONANT],[MUSIC],[NOISE]....)
+    *   **Speaker-level**: `speaker_id`, `age`, `gender`, `location` (province), `device`.
+      
+### Dataset Structure
 
-More details could be found in our paper [ChildMandarin](https://arxiv.org/abs/2409.18584)
+## Dialogue Dataset
+
+
+The dataset is split into two subsets:
+| Split      | # Speakers | # Dialogues | Duration (hrs) | Avg. Dialogue Length (h) |
+| :--------- | :--------: | :----------: | :------------: | :-----------------------: |
+| `train`    |    182     |    91    |     49.83     |           0.54            |
+| `test`     |     20     |    10     |      5.70      |           0.57            |
+| **Total**  |  **202**   |  **101**  |   **55.53**   |       **0.55**           |
+
+
+
+The dataset file structure is as follows.
+```
+
+dialogue_data/  
+├── wav  
+│   ├── train/*.tar   
+│   └── test/*.tar   
+└── transcript/*.txt
+UTTERANCEINFO.txt  # annotation of topics and duration
+SPKINFO.txt   # annotation of location , age , gender and device
+```
+Each WAV file has a corresponding TXT file with the same name, containing its annotations.
+
+For more details, please refer to our paper [SeniorTalk](https://www.arxiv.org/abs/2503.16578).
+
+## ASR Dataset
+
+
+The dataset is split into three subsets:
+| Split      | # Speakers | # Utterances | Duration (hrs) | Avg. Utterance Length (s) |
+| :--------- | :--------: | :----------: | :------------: | :-----------------------: |
+| `train`    |    162     |    47,269    |     29.95      |           2.28            |
+| `validation` |     20     |    6,891     |      4.09      |           2.14          |
+| `test`     |     20     |    5,869    |      3.77     |           2.31            |
+| **Total**  |  **202**   |  **60,029**  |   **37.81**   |       **2.27**           |
+
+
+The dataset file structure is as follows.
+```
+sentence_data/  
+├── wav  
+│   ├── train/*.tar
+│   ├── dev/*.tar 
+│   └── test/*.tar   
+└── transcript/*.txt   
+UTTERANCEINFO.txt  # annotation of topics and duration
+SPKINFO.txt   # annotation of location , age , gender and device
+```
+Each WAV file has a corresponding TXT, containing its annotations.
+
+For more details, please refer to our paper [SeniorTalk](https://www.arxiv.org/abs/2503.16578).
+
 
 ## 📐 Experiments
 
-We conducted experiments on Automatic Speech Recognition (ASR) and Speaker Verification (SV) tasks to evaluate the dataset.
+We conducted experiments on Automatic Speech Recognition (ASR) , Speaker Verification (SV) tasks , Speaker Dirazation (SD) tasks and Speech Editing tasks  to evaluate the dataset.
 
 ### 1️⃣ ASR Results
 
 #### Models Trained from Scratch
 
-| Encoder     | Loss       | # Params | Greedy | Beam  | Attention | Attention Rescoring |
-| :---------- | :--------- | :------- | :----- | :---- | :-------- | :------------------ |
-| Transformer | CTC+AED    | 29M      | 34.55  | 34.4  | 40.61     | 32.15               |
-| Conformer   | CTC+AED    | 31M      | 28.73  | 28.72 | 31.60     | 27.38               |
-| Conformer   | RNN-T+AED  | 45M      | 37.11  | 37.14 | 33.84     | 37.14               |
-| Paraformer  | Paraformer | 30M      | 31.86  | 28.94 | -         | -                   |
+| Encoder         | # Params | CER   | No    | Light | Moderate | Heavy | South | North |
+|-----------------|----------|-------|-------|-------|----------|-------|-------|-------|
+| Transformer     | 14.1M    | 48.99 | 22.58 | 49.05 | 51.07    | 80.95 | 48.5  | 50.24 |
+| Conformer       | 15.7M    | 34.61 | 21.23 | 34.21 | 37.62    | 59.52 | 34.55 | 34.74 |
+| E-Branchformer  | 16.9M    | 33.25 | 23.25 | 20.71 | 33.03    | 35.32 | 64.29 | 33.94 |
 
 #### Fine-tuned Pre-trained Models
 
-| Model           | # Params | Zero-shot | Fine-tuning |
-| :-------------- | :------- | :-------- | :---------- |
-| CW              | 122M     | 18.05     | 13.66       |
-| Whisper-tiny    | 39M      | 67.63     | 28.78       |
-| Whisper-base    | 74M      | 51.49     | 23.33       |
-| Whisper-small   | 244M     | 37.99     | 17.45       |
-| Whisper-medium  | 769M     | 28.55     | 18.97       |
-| Whisper-large-v2| 1,550M   | 29.43     | -           |
+| Model               | # Params | Zero-shot | Fine-tuning |
+|---------------------|----------|-----------|-------------|
+| Paraformer-large    | 232M     | 14.91     | 14.41       |
+| Whisper-tiny        | 39M      | 92.20     | 58.80       |
+| Whisper-base        | 74M      | 64.02     | 38.17       |
+| Whisper-small       | 244M     | 55.83     | 28.69       |
+| Whisper-medium      | 769M     | 60.47     | 25.77       |
+| Whisper-large-v3    | 1,550M   | 57.74     | 23.84       |
 
-
-#### More Pre-trained Models
-
-| Model           | # Params | Zero-shot | 
-| :-------------- | :------- | :-------- | 
-| Qwen-Audio      |  7.7B   | 20.39     | 
-| Qwen2-Audio    |  8.2B   | 11.54     | 
-| SenseVoice (Small)    |   234M   | 11.89     | 
 
 
 ### 2️⃣ SV Results
-|      Model      | # Params | Dim | Dev (%) | EER (%) | minDCF | EER (%) | minDCF  |
-|:---------------:|:--------:|:---:|:-------:|:-------:|:------:|:-------:|:-------:|
-|    x-vector    |   4.2M   | 512 |   75.4  |  8.91  | 0.7198 |  25.92 |  0.9780  |
-|  ECAPA-TDNN   |  20.8M   | 192 |   84.6  | 13.72 | 0.8697 | 27.77  | 0.9490 |
-| ResNet-TDNN |   15.5M  |  256  |  91.9  |   9.57  | 0.6597 | 22.11  | 0.9044 |
+
+
+| Model           | #Params | Dim     | Dev (%) | EER (%) | minDCF  | EER (%) | minDCF  | 
+|-----------------|---------|---------|---------|---------|---------|---------|---------|
+| X-vector        | 4.2M    | 512     | 12.04   | 14.63   | 0.9768  | 19.26   | 0.9598  | 
+| ResNet-TDNN     | 15.5M   | 256     | 4.372   | 10.88   | 0.8450  | 11.50   | 0.9196  | 
+| ECAPA-TDNN      | 20.8M   | 192     | 8.86    | 11.54   | 10.24   | 0.9582  | 0.9582       | 
+
+### 3️⃣ SD Results
+
+| Model | # Params | Dim | collar=0 DER(%) | collar=0 Confusion(%) | collar=0.25 DER(%) | collar=0.25 Confusion(%) |
+|-------|----------|-----|-----------------|-----------------------|---------------------|-------------------------|
+| ResNet-34-LM | 15.5M | 256 | 33.14 | 16.82 | 28.39 | 16.85 |
+| x-vector | 4.2M | 512 | 53.01 | 36.69 | 49.82 | 38.28 |
+| ResNet-TDNN | 15.5M | 256 | 43.44 | 27.13 | 39.58 | 28.03 |
+| ECAPA-TDNN | 20.8M | 192 | 27.84 | 11.52 | 22.85 | 11.31 |
+
+
+
+
+
+### 4️⃣ Speech Editing Results
+
+| Method       | MCD(↓) | STOI(↑) | PESQ(↑) |
+|--------------|--------|---------|---------|
+| CampNet      | 7.302  | 0.220   | 1.291   |
+| EditSpeech   | 6.225  | 0.514   | 1.363   |
+| A3T          | 5.851  | 0.586   | 1.455   |
+| FluentSpeech | 5.811  | 0.627   | 1.645   |
 
 
 
