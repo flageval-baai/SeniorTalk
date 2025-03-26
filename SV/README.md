@@ -1,4 +1,4 @@
-# Baseline Implementation with pyannote-audio
+# Baseline Implementation with speechbrain
 
 We provide a baseline implementation using the open-source [SpeechBrain](https://github.com/speechbrain/speechbrain) toolkit.
 
