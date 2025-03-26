@@ -1,0 +1,93 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+
+        {
+            "name": "ECAPA",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "train_speaker_embeddings.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "5",
+            },
+            "args": [
+                "configs/kids_datasets_ecapa_tdnn.yaml"
+            ]
+        },
+        {
+            "name": "XVec",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "train_speaker_embeddings.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "5",
+            },
+            "args": [
+                "configs/kids_datasets_xvector.yaml"
+            ]
+        },
+        {
+            "name": "ResNet",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "train_speaker_embeddings.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "5",
+            },
+            "args": [
+                "configs/kids_datasets_resnet.yaml"
+            ]
+        },
+        {
+            "name": "PLDA",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "speaker_verification_plda.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "5",
+            },
+            "args": [
+                "configs/kids_datasets.yaml"
+            ]
+        },
+        {
+            "name": "cosine",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "speaker_verification_cosine.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "5",
+            },
+            "args": [
+                "configs/kids_datasets.yaml"
+            ]
+        },
+        {
+            "name": "Unit",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "4,5",
+            },
+            "args": [
+                // "configs/kids_datasets.yaml"
+            ]
+        }
+    ]
+}

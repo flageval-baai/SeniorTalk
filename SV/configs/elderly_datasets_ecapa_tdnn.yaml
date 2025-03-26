@@ -1,0 +1,168 @@
+
+index_folder: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/index_elderly2
+
+train_scp: !ref <index_folder>/train/wav.scp
+dev_scp: !ref <index_folder>/dev/wav.scp
+test_scp: !ref <index_folder>/test/wav.scp
+
+data_output: results_elderly/
+csv_path: !ref <data_output>/csv
+
+train_csv: !ref <csv_path>/train.csv
+dev_csv: !ref <csv_path>/dev.csv
+test_csv: !ref <csv_path>/test.csv
+# ------------verification------------------------
+
+veri_trails: !ref <csv_path>/trails.txt
+sample_rate: 16000
+snt_min_len: 0.5 # 0.5s
+shuffle: True
+batch_size: 128
+
+emb_batch_size: 64
+n_train_snts: 48744 # used for normalization stats
+
+train_dataloader_opts:
+    batch_size: !ref <emb_batch_size>
+
+test_dataloader_opts:
+    batch_size: !ref <emb_batch_size>
+
+train_statobj_plda_pkl: !ref <csv_path>/train_statobj_plda.pkl
+train_statobj_cos_pkl: !ref <csv_path>/train_statobj_cos.pkl
+# test_statobj_pkl: !ref <csv_path>/test_statobj.pkl
+# -----------ECAPA_TDNN -------------------------
+model_name: ecapa_tdnn
+seed: 1234
+__set_seed: !apply:torch.manual_seed [!ref <seed>]
+output_folder: !ref results_elderly/nk_elderly/pretrained_<model_name>_<seed>
+save_folder: !ref <output_folder>
+
+device: cuda
+# Training parameters
+number_of_epochs: 10
+# batch_size: 32
+lr: 0.005
+base_lr: 0.00000001
+max_lr: !ref <lr>
+step_size: 65000
+# sample_rate: 16000
+# sentence_len: 3.0 # seconds
+# shuffle: True
+# random_chunk: True
+num_workers: 4
+dataloader_options:
+    batch_size: !ref <batch_size>
+    shuffle: !ref <shuffle>
+    num_workers: !ref <num_workers>
+
+ckpt_interval_minutes: 15 # save checkpoint every N min
+
+# Feature parameters
+n_mels: 80
+left_frames: 0
+right_frames: 0
+deltas: False
+
+out_n_neurons: 360 # * 355 for train+dev 
+emb_dim: 192
+
+# Functions
+compute_features: !new:speechbrain.lobes.features.Fbank
+    n_mels: !ref <n_mels>
+    left_frames: !ref <left_frames>
+    right_frames: !ref <right_frames>
+    deltas: !ref <deltas>
+
+embedding_model: !new:speechbrain.lobes.models.ECAPA_TDNN.ECAPA_TDNN
+    input_size: !ref <n_mels>
+    channels: [1024, 1024, 1024, 1024, 3072]
+    kernel_sizes: [5, 3, 3, 3, 1]
+    dilations: [1, 2, 3, 4, 1]
+    groups: [1, 1, 1, 1, 1]
+    attention_channels: 128
+    lin_neurons: !ref <emb_dim>
+
+classifier: !new:speechbrain.lobes.models.ECAPA_TDNN.Classifier
+    input_size: !ref <emb_dim>
+    out_neurons: !ref <out_n_neurons>
+
+epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
+    limit: !ref <number_of_epochs>
+
+mean_var_norm: !new:speechbrain.processing.features.InputNormalization
+    norm_type: sentence
+    std_norm: False
+
+modules:
+    compute_features: !ref <compute_features>
+    embedding_model: !ref <embedding_model>
+    classifier: !ref <classifier>
+    mean_var_norm: !ref <mean_var_norm>
+
+compute_cost: !new:speechbrain.nnet.losses.LogSoftmaxWrapper
+    loss_fn: !new:speechbrain.nnet.losses.AdditiveAngularMargin
+        margin: 0.2
+        scale: 30
+
+# compute_error: !name:speechbrain.nnet.losses.classification_error
+
+opt_class: !name:torch.optim.Adam
+    lr: !ref <lr>
+    weight_decay: 0.000002
+
+lr_annealing: !new:speechbrain.nnet.schedulers.CyclicLRScheduler
+    base_lr: !ref <base_lr>
+    max_lr: !ref <max_lr>
+    step_size: !ref <step_size>
+
+# Logging + checkpoints
+train_log: !ref <output_folder>/train_log.txt
+train_logger: !new:speechbrain.utils.train_logger.FileTrainLogger
+    save_file: !ref <train_log>
+
+error_stats: !name:speechbrain.utils.metric_stats.MetricStats
+    metric: !name:speechbrain.nnet.losses.classification_error
+        reduction: batch
+
+optable_table:
+    embedding_model: False
+    classifier: True
+
+ckpt_path: !ref <save_folder>/checkpoint
+checkpointer: !new:speechbrain.utils.checkpoints.Checkpointer
+    checkpoints_dir: !ref <ckpt_path>
+    allow_partial_load: True
+    recoverables:
+        embedding_model: !ref <embedding_model>
+        classifier: !ref <classifier>
+        normalizer: !ref <mean_var_norm>
+        counter: !ref <epoch_counter>
+        lr_annealing: !ref <lr_annealing>
+
+pretrained_path: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/model-speechbrain/pretrained
+pretrainer: !new:speechbrain.utils.parameter_transfer.Pretrainer
+    collect_in: !ref <pretrained_path>
+    loadables:
+        embedding_model: !ref <embedding_model>
+    paths:
+        embedding_model: !ref <pretrained_path>/embedding_model.ckpt
+
+
+finetune_path: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/results_elderly/nk_elderly/pretrained_ecapa_tdnn_1234/checkpoint/CKPT+2025-02-04+11-38-49+00
+finetunener: !new:speechbrain.utils.parameter_transfer.Pretrainer
+    collect_in: !ref <finetune_path>
+    loadables:
+        embedding_model: !ref <embedding_model>
+    paths:
+        embedding_model: !ref <finetune_path>/embedding_model.ckpt
+
+# * ---------------- PLDA module ----------------------------
+
+rank_f: 100
+
+compute_plda: !new:speechbrain.processing.PLDA_LDA.PLDA
+    rank_f: !ref <rank_f>
+    nb_iter: 10
+    scaling_factor: 0.05
+
