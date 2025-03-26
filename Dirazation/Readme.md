@@ -5,6 +5,7 @@ We provide a baseline implementation using the open-source [pyannote-audio](http
 ## Steps to Run the Baseline
 
 1. Follow the instructions of pyannote-audio, and figure out how to run a regular speaker dirazation task.
-2. 
-3. Modify all `run.sh` to update the local paths according to your setup.
-4. Run all `run.sh` to execute the baseline model.
+2. change the config.yaml in ./model into your model path trained in SV task
+3. Modify all `speaker_dirazation_pyannote.py` to update the local paths according to your setup.
+4. Run all `speaker_dirazation_pyannote.py` to generate dirazation result .
+5. Run all `cal_der.py` to generate der result.

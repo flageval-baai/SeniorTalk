@@ -1,0 +1,21 @@
+version: 3.0.0
+
+pipeline:
+  name: pyannote.audio.pipelines.SpeakerDiarization
+  params:
+    clustering: AgglomerativeClustering
+    # embedding: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/model-speechbrain/fintuned-10epoch
+    embedding: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/model-speechbrain/resnet_pretrained
+    # embedding: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/model-speechbrain/pretrained
+    # embedding: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/speaker_dirazation/model/spk_emb/pytorch_model.bin
+    # embedding: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/children_spk/model-speechbrain/xvec_pretrained
+    segmentation: /home/chenyang/chenyang_space/speech_editing_and_tts/projects/speaker_dirazation/model/segmentation3.0/pytorch_model.bin
+    segmentation_batch_size: 32
+
+params:
+  clustering:
+    method: centroid
+    min_cluster_size: 12
+    threshold: 0.7045654963945799
+  segmentation:
+    min_duration_off: 0.0
