@@ -4,7 +4,7 @@
 [![Hugging Face Datasets](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/BAAI/SeniorTalk)
 [![arXiv](https://img.shields.io/badge/arXiv-2409.18584-b31b1b.svg)](https://www.arxiv.org/pdf/2503.16578)
 [![License: CC BY-NC-SA-4.0](https://img.shields.io/badge/License-CC%20BY--SA--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![Github](https://img.shields.io/badge/Github-ChildMandarin-blue)](https://github.com/flageval-baai/SeniorTalk)
+[![Github](https://img.shields.io/badge/Github-SeniorTalk-blue)](https://github.com/flageval-baai/SeniorTalk)
 
 ## Introduction
 
@@ -15,9 +15,9 @@
 This dataset contains 55.53 hours of high-quality speech data collected from 202 elderly across 16 provinces in China. Key features of the dataset include:
 
 *   **Age Range:**  75-85 years old (inclusive).  This is a crucial age range often overlooked in speech datasets.
-*   **Speakers:** 202 unique child speakers.
+*   **Speakers:** 202 unique elderly speakers.
 *   **Geographic Diversity:** Speakers from 16 of China's 34 provincial-level administrative divisions, capturing a range of regional accents.
-*   **Gender Balance:**  Approximately 1:3 representation of male and female speakers, largely attributed to the differing average ages of males and females among the elderly.
+*   **Gender Balance:**  Approximately 7:13 representation of male and female speakers, largely attributed to the differing average ages of males and females among the elderly.
 *   **Recording Conditions:**  Recordings were made in quiet environments using a variety of smartphones (both Android and iPhone devices) to ensure real-world applicability.
 *   **Content:**  Natural, conversational speech during age-appropriate activities.  The content is unrestricted, promoting spontaneous and natural interactions.
 *   **Audio Format:**  WAV files with a 16kHz sampling rate. 
