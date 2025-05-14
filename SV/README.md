@@ -8,14 +8,14 @@ We provide a baseline implementation using the open-source [SpeechBrain](https:/
 
 2. Train Speaker Embeddings: Run train_speaker_embeddings.py to train the models.
 
-3. Calculate Cosine Similarity (Method 1): Run speaker_verification_cosine.py to calculate the cosine similarity results.  The script will random a 2e4 trail file, so the result is different from time to time.
+3. Calculate Cosine Similarity (Method 1): Run speaker_verification_cosine.py to calculate the cosine similarity results.  The script will random a 2e4 trail file at first time.
 ```bash
 CUDA_VISIBLE_DEVICES=6 python speaker_verification_cosine.py  configs/elderly_datasets_resnet.yaml 
 CUDA_VISIBLE_DEVICES=6 python speaker_verification_cosine.py  configs/elderly_datasets_ecapatdnn.yaml 
 CUDA_VISIBLE_DEVICES=6 python speaker_verification_cosine.py  configs/elderly_datasets_xvec.yaml 
 ```
 
-5. Calculate Cosine Similarity (Method 2): Run speaker_verification_plda.py to calculate the cosine similarity results. The script will random a 2e4 trail file, so the result is different from time to time.
+5. Calculate Cosine Similarity (Method 2): Run speaker_verification_plda.py to calculate the cosine similarity results.The script will random a 2e4 trail file at first time.
 
 ```bash
 CUDA_VISIBLE_DEVICES=6 python speaker_verification_plda.py  configs/elderly_datasets_resnet.yaml 
